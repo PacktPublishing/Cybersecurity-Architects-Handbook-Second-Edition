@@ -1,0 +1,36 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowApprovedModelsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ],
+      "Resource": [
+        "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-*",
+        "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-*"
+      ],
+      "Condition": {
+        "StringLike": {
+          "bedrock:GuardrailIdentifier": "arn:aws:bedrock:us-east-1:*:guardrail/*"
+        }
+      }
+    },
+    {
+      "Sid": "DenyInvocationWithoutGuardrail",
+      "Effect": "Deny",
+      "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "Null": {
+          "bedrock:GuardrailIdentifier": "true"
+        }
+      }
+    }
+  ]
+}

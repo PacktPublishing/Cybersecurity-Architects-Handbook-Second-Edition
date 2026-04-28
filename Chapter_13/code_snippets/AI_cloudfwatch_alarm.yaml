@@ -1,0 +1,21 @@
+# CloudFormation snippet: Alert on guardrail intervention spike
+GuardrailViolationAlarm:
+  Type: AWS::CloudWatch::Alarm
+  Properties:
+    AlarmName: "AI-GuardrailViolationSpike"
+    AlarmDescription: >-
+      Alerts when guardrail interventions exceed the expected baseline,
+      indicating possible adversarial probing of the AI system.
+    MetricName: "InvocationsIntervened"
+    Namespace: "AWS/Bedrock/Guardrails"
+    Dimensions:
+      - Name: Operation
+        Value: ApplyGuardrail
+    Statistic: Sum
+    Period: 300        # 5-minute evaluation window
+    EvaluationPeriods: 1
+    Threshold: 25      # Alert if >25 blocks in 5 minutes
+    ComparisonOperator: GreaterThanThreshold
+    TreatMissingData: notBreaching
+    AlarmActions:
+      - !Ref SecurityTeamSNSTopic  # Notify SOC
