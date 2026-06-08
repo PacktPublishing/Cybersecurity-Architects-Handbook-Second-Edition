@@ -1,9 +1,0 @@
-[Unit]
-Description=Run CAH2 security brief each morning
-
-[Timer]
-OnCalendar=*-*-* 07:30:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target

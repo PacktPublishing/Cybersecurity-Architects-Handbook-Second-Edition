@@ -1,6 +1,0 @@
-[Unit]
-Description=CAH2 daily security brief
-
-[Service]
-Type=oneshot
-ExecStart=%h/cah2-ai-agents/run_brief.sh
